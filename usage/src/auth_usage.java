@@ -14,6 +14,8 @@ class auth_usage implements model{
 	double c4; // min auth
 	double c5;// max auth
 	double x_set[];// for computing usage value
+	double a_Reg[]=new double[4];//regression conatant for y=a+bx
+	double b_Reg[]=new double[4];//regression constant for y=a+bx
 	auth_usage(){
 		math_modeller=new usage_modeller(4);// for independent variables of size 4 (0-3)
 		x1=0;
@@ -31,7 +33,7 @@ class auth_usage implements model{
 		x3=Math.round(rand.nextDouble()*2);// 0 to 100 kb
 		x4=Math.round(rand.nextDouble()*2);// 0 to 100 kb
 		y=Math.round(rand.nextDouble()*60);//0 to 60 seconds(1 mins)
-		System.out.println("x1: "+x1+" x2: "+x2+" x3: "+x3+"x4: "+x4);
+		System.out.println("x1: "+x1+" x2: "+x2+" x3: "+x3+"x4: "+x4+ " y1: "+y);
 	}
 	public void set_x(double x_set[]){
 		this.x_set=x_set;
@@ -64,6 +66,9 @@ class auth_usage implements model{
 		}
 	}
 	public Object findrelationship(){
+		math_modeller.findLinearRelationship();
+		a_Reg=math_modeller.a_Reg;
+		b_Reg=math_modeller.b_Reg;
 		return null;
 	}
 	public void monitor(int t){
@@ -74,14 +79,7 @@ class auth_usage implements model{
 	}
 	public void predictvals(){
 	}
-	public static void main(String args[]){
-		auth_usage usg=new auth_usage();
-		for (int i=0;i<10;i++){
-			usg.capture_sample();
-			usg.set_sample();
-		}
-		usg.print_sample_stats(usg.math_modeller);
-	}
+	
 	public void print_sample_stats(usage_modeller math_modeller){
 		math_modeller.end_modeller=true;
 		usage_stats us=math_modeller.get_usage_stats();
@@ -89,7 +87,9 @@ class auth_usage implements model{
 		System.out.println("Average authentication time: "+us.average_y);
 		x_set set=us.average_x_set;
 		System.out.println("Average x1,x2,x3,x4: "+set.x_set[0]+","+set.x_set[1]+","+set.x_set[2]+","+set.x_set[3]);
-		
 	}
-	
+	public void print_Reg_vals(){
+		System.out.println("Reg values for a are: "+a_Reg[0]+" "+a_Reg[1]+" "+a_Reg[2]+" "+a_Reg[3]);
+		System.out.println("Reg values for b are: "+b_Reg[0]+" "+b_Reg[1]+" "+b_Reg[2]+" "+b_Reg[3]);
+	}
 }

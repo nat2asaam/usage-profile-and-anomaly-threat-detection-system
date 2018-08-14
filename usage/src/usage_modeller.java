@@ -11,6 +11,8 @@ class usage_modeller{
 	x_set average_x_set;
 	x_set x_set_standard_deviations;
 	boolean end_modeller;
+	double a_Reg[];
+	double b_Reg[];
 	usage_modeller(int n){
 		x_set_list=new ArrayList<x_set>();
 		y_list=new ArrayList<Double>();
@@ -45,6 +47,40 @@ class usage_modeller{
 		set.set_xset(x_set);
 		x_set_list.add(set);
 		
+	}
+	//find the linear regression given by Y=a+bx
+	// we have to find a and b for relationship betweeen x and Y
+	public void findLinearRelationship(){
+		double sum_Y_squared=0;
+		double sum_X_set_squared[];
+		sum_X_set_squared=new double[n];
+		double x_set_details[];
+		x_set_details=new double[n];
+		double sum_X_set[];
+		sum_X_set=new double[n];
+		double sum_Y=0;
+		a_Reg=new double[n];
+		b_Reg=new double[n];
+		double sum_XY[]=new double[n];
+		int w=0;
+		for(int i=0;i<x_set_list.size();i++){
+			x_set set=x_set_list.get(i);
+			x_set_details=set.x_set;
+			sum_Y_squared+=Math.pow(y_list.get(i),2);
+			sum_Y+=y_list.get(i);
+			w=set.n;
+			for(int j=0;j<set.n;j++){
+				sum_X_set_squared[j]+=Math.pow(x_set_details[j],2);
+				sum_X_set[j]+=x_set_details[j];
+				sum_XY[j]+=x_set_details[j]*y_list.get(i);
+			}
+		}
+		for(int j=0;j<w;j++){
+			a_Reg[j]=(sum_Y*sum_X_set_squared[j])-(sum_X_set[j]*sum_XY[j]);
+			a_Reg[j]/=(x_set_list.size()*sum_X_set_squared[j])-Math.pow(sum_X_set[j],2);
+			b_Reg[j]=(x_set_list.size()*sum_XY[j])-(sum_X_set[j]*sum_Y);
+			b_Reg[j]/=(x_set_list.size()*sum_X_set_squared[j])-(Math.pow(sum_X_set[j],2));
+		}
 	}
 	private double mean_y(){
 		double mean=0;
