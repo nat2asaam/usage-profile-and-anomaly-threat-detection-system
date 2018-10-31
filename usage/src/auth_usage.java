@@ -72,6 +72,19 @@ class auth_usage implements model{
 		return null;
 	}
 	public void monitor(int t){
+		System.out.println("Monitoring ....");
+		for(int i=0;i<t;i++){
+			capture_sample();
+			double y1=a_Reg[0]+(b_Reg[0]*x1);
+			double y2=a_Reg[1]+(b_Reg[1]*x2);
+			double y3=a_Reg[2]+(b_Reg[2]*x3);
+			double y4=a_Reg[3]+(b_Reg[3]*x4);
+			System.out.println("Predicted Y values: ");
+			System.out.println("y1: "+y1);
+			System.out.println("y2: "+y2);
+			System.out.println("y3: "+y3);
+			System.out.println("y4: "+y4);
+		}
 	}
 	public void showalarm(String info){
 	}

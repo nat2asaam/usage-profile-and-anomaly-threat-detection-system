@@ -5,5 +5,6 @@ class usage{
 		usg.print_sample_stats(usg.math_modeller);
 		usg.findrelationship();
 		usg.print_Reg_vals();
+		usg.monitor(10);
 	}
 }
